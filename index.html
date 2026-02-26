@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Earn Wallet - Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        :root { 
+            --primary: #E2136E; 
+            --primary-soft: #ffe6ef;
+            --bg: #F8F8F8; 
+            --surface: #FFFFFF; 
+            --text: #464646; 
+            --gray: #787878;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg); color: var(--text); padding-bottom: 90px; overflow-x: hidden; user-select: none; }
+        #app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; display: none; }
+
+        /* HEADER */
+        .header { background: var(--primary); padding: 50px 20px 85px; border-radius: 0 0 25px 25px; color: white; position: relative; box-shadow: 0 5px 20px rgba(226, 19, 110, 0.2); }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; }
+        .user-pill { display: flex; align-items: center; gap: 12px; }
+        .user-pill img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.8); object-fit: cover; background: #fff; }
+        .user-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0px; }
+        .user-info p { font-size: 0.75rem; opacity: 0.95; background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 20px; display: inline-block; margin-top: 3px; }
+
+        /* BALANCE CARD */
+        .balance-card { background: var(--surface); width: 92%; margin: -65px auto 20px; padding: 20px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); position: relative; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
+        .bal-left { text-align: left; }
+        .bal-title { font-size: 0.8rem; color: var(--gray); font-weight: 500; }
+        .bal-amt { font-size: 1.8rem; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
+        .btn-withdraw-mini { background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(226, 19, 110, 0.3); transition: 0.2s; }
+
+        /* PAGE ANIMATION */
+        .page { display: none; padding: 0 15px; animation: slideUp 0.3s ease-out; }
+        .page.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        .sec-head { font-size: 1rem; font-weight: 700; margin: 25px 0 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+
+        /* PROMO SLIDER */
+        .promo-slider { width: 100%; overflow: hidden; border-radius: 16px; margin-top: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background: white; }
+        .promo-track { display: flex; width: 500%; animation: bannerScroll 20s infinite; }
+        .promo-card { width: 100%; height: 140px; padding: 20px; position: relative; display: flex; align-items: center; justify-content: space-between; color: white; overflow: hidden; }
+        .pc-1 { background: linear-gradient(135deg, #E2136E, #9b0a48); } 
+        .pc-2 { background: linear-gradient(135deg, #8e44ad, #5e2d73); } 
+        .pc-3 { background: linear-gradient(135deg, #F7941D, #c46f08); } 
+        .pc-4 { background: linear-gradient(135deg, #2ecc71, #219150); } 
+        .pc-5 { background: linear-gradient(135deg, #3498db, #21618c); } 
+        @keyframes bannerScroll {
+            0%, 15% { transform: translateX(0); } 20%, 35% { transform: translateX(-20%); } 40%, 55% { transform: translateX(-40%); }
+            60%, 75% { transform: translateX(-60%); } 80%, 95% { transform: translateX(-80%); } 100% { transform: translateX(0); }
+        }
+
+        /* MENU GRID */
+        .bkash-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .menu-card { background: white; border-radius: 16px; padding: 20px 10px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee; cursor: pointer; transition: 0.2s; }
+        .icon-circle { width: 55px; height: 55px; margin: 0 auto 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: #f8f9fa; color: #555; }
+
+        /* NAV BAR */
+        .nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 10px 25px; border-top: 1px solid #f5f5f5; z-index: 100; border-radius: 20px 20px 0 0; }
+        .nav-item { text-align: center; color: #a0a0a0; flex: 1; cursor: pointer; font-size: 0.75rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+        .nav-item.active { color: var(--primary); }
+
+        /* JOIN SCREEN */
+        #join-screen { position: fixed; inset: 0; background: white; z-index: 9000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
+        .join-card { background: #f8f9fa; border: 1px solid #eee; width: 100%; padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+        .verify-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 700; width: 100%; margin-top: 10px; }
+
+        /* HOLD BUTTON */
+        .hold-container { width: 100%; height: 60px; position: relative; background: #fff; border: 2px solid var(--primary); border-radius: 50px; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-top: 10px; }
+        .hold-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: var(--primary); transition: width 0s linear; z-index: 1; }
+        .hold-text { position: relative; z-index: 2; font-weight: 700; color: var(--primary); transition: 0.2s; }
+        .hold-container.active .hold-fill { width: 100%; transition: width 2.5s linear; }
+        .hold-container.active .hold-text { color: white; }
+
+        .toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 25px; border-radius: 50px; transition: 0.4s; z-index: 10000; }
+        .toast.show { top: 30px; }
+    </style>
+</head>
+<body>
+
+    <div id="loader" style="position:fixed; inset:0; background:white; z-index:9999; display:flex; justify-content:center; align-items:center;">
+        <i class="fas fa-circle-notch fa-spin" style="color:var(--primary); font-size:2rem;"></i>
+    </div>
+
+    <div id="join-screen">
+        <i class="fas fa-bullhorn" style="font-size:3rem; color:var(--primary); margin-bottom:20px;"></i>
+        <h2 style="margin-bottom:10px;">Join Channels</h2>
+        <p style="color:#666; margin-bottom:30px;">পেমেন্ট পেতে নিচের ২টি চ্যানেলে জয়েন করুন।</p>
+        <div class="join-card" onclick="openJoinLink(1)">
+            <div style="display:flex; align-items:center; gap:15px;"><i class="fab fa-telegram-plane" style="color:#229ED9; font-size:1.5rem;"></i><span>Official Channel</span></div>
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        <div class="join-card" onclick="openJoinLink(2)">
+            <div style="display:flex; align-items:center; gap:15px;"><i class="fab fa-telegram-plane" style="color:#229ED9; font-size:1.5rem;"></i><span>Payment Proof</span></div>
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        <button id="v-btn" class="verify-btn" onclick="verifyJoin()">VERIFY NOW</button>
+    </div>
+
+    <div id="toast" class="toast">Alert</div>
+
+    <div id="app">
+        <div class="header">
+            <div class="top-bar">
+                <div class="user-pill">
+                    <img id="u-img" src="">
+                    <div class="user-info"><h3 id="u-name">...</h3><p id="u-id">ID: ...</p></div>
+                </div>
+                <div onclick="openSupport()" style="background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fas fa-headset"></i></div>
+            </div>
+        </div>
+
+        <div class="balance-card">
+            <div class="bal-left"><div class="bal-title">Total Balance</div><div class="bal-amt">৳ <span id="u-bal">0.00</span></div></div>
+            <button class="btn-withdraw-mini" onclick="openWithdrawModal()"><i class="fas fa-arrow-down"></i> Withdraw</button>
+        </div>
+
+        <div id="p-home" class="page active">
+            <div class="promo-slider">
+                <div class="promo-track">
+                    <div class="promo-card pc-1"><h4>Refer & Earn</h4><i class="fas fa-users" style="opacity:0.3; font-size:4rem;"></i></div>
+                    <div class="promo-card pc-2"><h4>Fast Payment</h4><i class="fas fa-bolt" style="opacity:0.3; font-size:4rem;"></i></div>
+                </div>
+            </div>
+            <div class="bkash-menu">
+                <div class="menu-card" onclick="nav('p-work')"><div class="icon-circle"><i class="fas fa-briefcase"></i></div><div class="menu-title">Start Work</div></div>
+                <div class="menu-card" onclick="toast('Coming Soon!')"><div class="icon-circle"><i class="fas fa-video"></i></div><div class="menu-title">Video Task</div></div>
+            </div>
+        </div>
+
+        <div id="p-work" class="page">
+            <div class="sec-head"><i class="fas fa-tasks"></i> Available Tasks</div>
+            <div id="task-area"></div>
+        </div>
+
+        <div id="p-profile" class="page">
+            <div style="background:var(--primary); color:white; padding:25px; border-radius:20px; text-align:center; margin-top:20px;">
+                <h3>Refer Link</h3>
+                <input id="ref-link" readonly style="width:100%; padding:10px; margin-top:10px; border-radius:10px; border:none; text-align:center;">
+                <button onclick="copyRef()" style="margin-top:10px; padding:5px 20px; border-radius:20px; border:none;">Copy</button>
+            </div>
+        </div>
+
+        <div id="withdraw-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:flex-end;">
+            <div style="background:white; width:100%; padding:25px; border-radius:25px 25px 0 0;">
+                <h3>Withdraw</h3>
+                <input id="w-acc" placeholder="Account Number" style="width:100%; padding:15px; margin-top:15px; border-radius:12px; border:1px solid #ddd;">
+                <input id="w-amt" type="number" placeholder="Amount (TK)" style="width:100%; padding:15px; margin-top:10px; border-radius:12px; border:1px solid #ddd;">
+                <div id="hold-trigger" class="hold-container">
+                    <div class="hold-fill"></div>
+                    <span class="hold-text">Tap and Hold to Withdraw</span>
+                </div>
+                <button onclick="closeWithdrawModal()" style="width:100%; margin-top:10px; border:none; background:none; color:#777;">Cancel</button>
+            </div>
+        </div>
+
+        <div class="nav">
+            <div class="nav-item active" onclick="nav('p-home', this)"><i class="fas fa-home"></i><span>Home</span></div>
+            <div class="nav-item" onclick="nav('p-work', this)"><i class="fas fa-tasks"></i><span>Work</span></div>
+            <div class="nav-item" onclick="nav('p-profile', this)"><i class="fas fa-user"></i><span>Profile</span></div>
+        </div>
+    </div>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getDatabase, ref, onValue, update, push, get, query, orderByChild } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+
+        // --- CONFIG ---
+        const BOT_TOKEN = "8660812282:AAFvuDIFxuU9_WaXPUMK6CGURFUGWY1jSos";
+        const CHANNEL_1_ID = "@Viralbdcontent_bot1"; 
+        const CHANNEL_2_ID = "@Viralbdcontent_bot";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYj2AGcDm7kKVm3W_BJogcY2MPMPGgwAU",
+            authDomain: "online-eraning-22953.firebaseapp.com",
+            databaseURL: "https://online-eraning-22953-default-rtdb.firebaseio.com",
+            projectId: "online-eraning-22953",
+            storageBucket: "online-eraning-22953.firebasestorage.app",
+            appId: "1:1010449141133:web:744962c94cb2f8b06081c4"
+        };
+
+        const fApp = initializeApp(firebaseConfig);
+        const db = getDatabase(fApp);
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        const userId = tg.initDataUnsafe.user?.id.toString() || "test_123";
+        const firstName = tg.initDataUnsafe.user?.first_name || "Guest";
+        const photoUrl = tg.initDataUnsafe.user?.photo_url || "https://ui-avatars.com/api/?name=" + firstName;
+
+        let userData = {};
+
+        // INITIALIZE
+        async function init() {
+            const isMember = await checkMembership();
+            document.getElementById('loader').style.display = 'none';
+
+            if (!isMember) {
+                document.getElementById('join-screen').style.display = 'flex';
+            } else {
+                document.getElementById('app').style.display = 'block';
+                loadUserData();
+            }
+        }
+
+        async function checkMembership() {
+            try {
+                const check = async (cid) => {
+                    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${cid}&user_id=${userId}`);
+                    const data = await res.json();
+                    return data.ok && ["member", "administrator", "creator"].includes(data.result.status);
+                };
+                return (await check(CHANNEL_1_ID)) && (await check(CHANNEL_2_ID));
+            } catch (e) { return false; }
+        }
+
+        window.verifyJoin = async () => {
+            const btn = document.getElementById('v-btn');
+            btn.innerText = "Checking...";
+            const member = await checkMembership();
+            if (member) {
+                toast("Success!");
+                location.reload();
+            } else {
+                toast("Join both channels first!");
+                btn.innerText = "VERIFY NOW";
+            }
+        };
+
+        function loadUserData() {
+            const userRef = ref(db, `users/${userId}`);
+            onValue(userRef, (snap) => {
+                if (!snap.exists()) {
+                    update(userRef, { id: userId, firstName, balance: 0, photoUrl });
+                } else {
+                    userData = snap.val();
+                    document.getElementById('u-bal').innerText = userData.balance.toFixed(2);
+                    document.getElementById('u-name').innerText = userData.firstName;
+                    document.getElementById('u-id').innerText = "ID: " + userId;
+                    document.getElementById('u-img').src = userData.photoUrl;
+                    document.getElementById('ref-link').value = `https://t.me/YourBot?start=${userId}`;
+                }
+            });
+            loadTasks();
+        }
+
+        function loadTasks() {
+            const taskRef = ref(db, 'tasks');
+            onValue(taskRef, (snap) => {
+                const area = document.getElementById('task-area');
+                area.innerHTML = '';
+                snap.forEach(child => {
+                    const t = child.val();
+                    area.innerHTML += `
+                        <div style="background:white; padding:15px; border-radius:15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border:1px solid #eee;">
+                            <div><b>${t.title}</b><br><small style="color:green;">+${t.reward} TK</small></div>
+                            <button onclick="window.doTask('${child.key}', '${t.url}', ${t.reward})" style="background:var(--primary-soft); color:var(--primary); border:none; padding:8px 20px; border-radius:50px; font-weight:700;">Start</button>
+                        </div>`;
+                });
+            });
+        }
+
+        window.doTask = (id, url, r) => {
+            tg.openLink(url);
+            setTimeout(() => {
+                update(ref(db, `users/${userId}`), { balance: userData.balance + r });
+                toast("Reward Added!");
+            }, 5000);
+        };
+
+        window.nav = (p, el) => {
+            document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+            document.getElementById(p).classList.add('active');
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                el.classList.add('active');
+            }
+        };
+
+        window.openWithdrawModal = () => document.getElementById('withdraw-modal').style.display = 'flex';
+        window.closeWithdrawModal = () => document.getElementById('withdraw-modal').style.display = 'none';
+
+        // HOLD TO WITHDRAW
+        let holdTime;
+        const hBtn = document.getElementById('hold-trigger');
+        hBtn.addEventListener('mousedown', startH);
+        hBtn.addEventListener('touchstart', startH);
+        hBtn.addEventListener('mouseup', endH);
+        hBtn.addEventListener('touchend', endH);
+
+        function startH() {
+            hBtn.classList.add('active');
+            holdTime = setTimeout(processWithdraw, 2500);
+        }
+        function endH() {
+            hBtn.classList.remove('active');
+            clearTimeout(holdTime);
+        }
+
+        function processWithdraw() {
+            const amt = parseFloat(document.getElementById('w-amt').value);
+            const acc = document.getElementById('w-acc').value;
+            if (amt && acc && userData.balance >= amt) {
+                push(ref(db, 'withdrawals'), { userId, amount: amt, account: acc, status: 'pending', timestamp: Date.now() });
+                update(ref(db, `users/${userId}`), { balance: userData.balance - amt });
+                toast("Withdraw Request Sent!");
+                closeWithdrawModal();
+            } else {
+                toast("Check Balance/Inputs");
+            }
+        }
+
+        window.openJoinLink = (id) => tg.openTelegramLink(id === 1 ? `https://t.me/${CHANNEL_1_ID.replace('@','')}` : `https://t.me/${CHANNEL_2_ID.replace('@','')}`);
+        window.toast = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); };
+        window.copyRef = () => { document.getElementById('ref-link').select(); document.execCommand('copy'); toast("Copied!"); };
+
+        init();
+    </script>
+</body>
+</html>
