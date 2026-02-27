@@ -1,326 +1,495 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Earn Wallet - Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <style>
-        :root { 
-            --primary: #E2136E; 
-            --primary-soft: #ffe6ef;
-            --bg: #F8F8F8; 
-            --surface: #FFFFFF; 
-            --text: #464646; 
-            --gray: #787878;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: var(--text); padding-bottom: 90px; overflow-x: hidden; user-select: none; }
-        #app { max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; display: none; }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Viral Zone</title>
 
-        /* HEADER */
-        .header { background: var(--primary); padding: 50px 20px 85px; border-radius: 0 0 25px 25px; color: white; position: relative; box-shadow: 0 5px 20px rgba(226, 19, 110, 0.2); }
-        .top-bar { display: flex; justify-content: space-between; align-items: center; }
-        .user-pill { display: flex; align-items: center; gap: 12px; }
-        .user-pill img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.8); object-fit: cover; background: #fff; }
-        .user-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0px; }
-        .user-info p { font-size: 0.75rem; opacity: 0.95; background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 20px; display: inline-block; margin-top: 3px; }
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Hind+Siliguri:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-        /* BALANCE CARD */
-        .balance-card { background: var(--surface); width: 92%; margin: -65px auto 20px; padding: 20px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); position: relative; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
-        .bal-left { text-align: left; }
-        .bal-title { font-size: 0.8rem; color: var(--gray); font-weight: 500; }
-        .bal-amt { font-size: 1.8rem; font-weight: 700; color: var(--primary); letter-spacing: -0.5px; }
-        .btn-withdraw-mini { background: var(--primary); color: white; border: none; padding: 8px 20px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(226, 19, 110, 0.3); transition: 0.2s; }
+<!-- TELEGRAM WEB APP SDK -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-        /* PAGE ANIMATION */
-        .page { display: none; padding: 0 15px; animation: slideUp 0.3s ease-out; }
-        .page.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        .sec-head { font-size: 1rem; font-weight: 700; margin: 25px 0 12px; color: var(--text); display: flex; align-items: center; gap: 8px; }
+<!-- ADSGRAM SCRIPT -->
+<script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
-        /* PROMO SLIDER */
-        .promo-slider { width: 100%; overflow: hidden; border-radius: 16px; margin-top: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background: white; }
-        .promo-track { display: flex; width: 500%; animation: bannerScroll 20s infinite; }
-        .promo-card { width: 100%; height: 140px; padding: 20px; position: relative; display: flex; align-items: center; justify-content: space-between; color: white; overflow: hidden; }
-        .pc-1 { background: linear-gradient(135deg, #E2136E, #9b0a48); } 
-        .pc-2 { background: linear-gradient(135deg, #8e44ad, #5e2d73); } 
-        .pc-3 { background: linear-gradient(135deg, #F7941D, #c46f08); } 
-        .pc-4 { background: linear-gradient(135deg, #2ecc71, #219150); } 
-        .pc-5 { background: linear-gradient(135deg, #3498db, #21618c); } 
-        @keyframes bannerScroll {
-            0%, 15% { transform: translateX(0); } 20%, 35% { transform: translateX(-20%); } 40%, 55% { transform: translateX(-40%); }
-            60%, 75% { transform: translateX(-60%); } 80%, 95% { transform: translateX(-80%); } 100% { transform: translateX(0); }
-        }
+<style>
+/* --- DESIGN SYSTEM --- */
+:root { --primary: #8b5cf6; --primary-gradient: linear-gradient(135deg, #8b5cf6, #ec4899); --bg-main: #0f0f23; --bg-card: #1a1a2e; --bg-nav: rgba(30, 30, 48, 0.95); --text-main: #ffffff; --text-muted: #9ca3af; --border: 1px solid rgba(255,255,255,0.08); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { margin: 0; background: var(--bg-main); color: var(--text-main); font-family: 'Poppins', 'Hind Siliguri', sans-serif; padding-bottom: 90px; }
+.app { max-width: 500px; margin: 0 auto; padding: 12px; }
 
-        /* MENU GRID */
-        .bkash-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .menu-card { background: white; border-radius: 16px; padding: 20px 10px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee; cursor: pointer; transition: 0.2s; }
-        .icon-circle { width: 55px; height: 55px; margin: 0 auto 10px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; background: #f8f9fa; color: #555; }
+.header { background: linear-gradient(to bottom, #1e1e30, #151525); padding: 20px; border-radius: 16px; text-align: center; border: var(--border); margin-bottom: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+.title { font-size: 26px; font-weight: 800; color: #a855f7; margin: 0; letter-spacing: 1px; }
+.subtitle { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
 
-        /* NAV BAR */
-        .nav { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 15px 10px 25px; border-top: 1px solid #f5f5f5; z-index: 100; border-radius: 20px 20px 0 0; }
-        .nav-item { text-align: center; color: #a0a0a0; flex: 1; cursor: pointer; font-size: 0.75rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .nav-item.active { color: var(--primary); }
+.search-wrapper { position: relative; margin-bottom: 15px; }
+.search-input { width: 100%; padding: 14px 20px; padding-right: 50px; border-radius: 50px; background: #232336; border: var(--border); color: white; font-size: 14px; outline: none; transition: 0.3s; }
+.search-input:focus { border-color: #8b5cf6; background: #2a2a40; }
+.search-icon { position: absolute; right: 5px; top: 5px; background: var(--primary); width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 14px; }
 
-        /* JOIN SCREEN */
-        #join-screen { position: fixed; inset: 0; background: white; z-index: 9000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
-        .join-card { background: #f8f9fa; border: 1px solid #eee; width: 100%; padding: 15px; border-radius: 15px; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
-        .verify-btn { background: var(--primary); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 700; width: 100%; margin-top: 10px; }
+.filter-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-bottom: 15px; scrollbar-width: none; }
+.filter-scroll::-webkit-scrollbar { display: none; }
+.filter-btn { position: relative; padding: 8px 18px; background: var(--bg-card); border: var(--border); color: #ccc; border-radius: 50px; font-size: 13px; white-space: nowrap; cursor: pointer; margin-top: 8px; margin-right: 5px; }
+.filter-btn.active { background: var(--primary-gradient); color: white; border: none; padding: 9px 19px; }
+.badge { position: absolute; top: -6px; right: -2px; background: #ef4444; color: white; font-size: 9px; font-weight: bold; height: 18px; min-width: 18px; padding: 0 4px; border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 2px solid var(--bg-main); z-index: 10; }
 
-        /* HOLD BUTTON */
-        .hold-container { width: 100%; height: 60px; position: relative; background: #fff; border: 2px solid var(--primary); border-radius: 50px; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-top: 10px; }
-        .hold-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0%; background: var(--primary); transition: width 0s linear; z-index: 1; }
-        .hold-text { position: relative; z-index: 2; font-weight: 700; color: var(--primary); transition: 0.2s; }
-        .hold-container.active .hold-fill { width: 100%; transition: width 2.5s linear; }
-        .hold-container.active .hold-text { color: white; }
+.cards { display: flex; flex-direction: column; gap: 15px; }
+.card { background: var(--bg-card); border-radius: 16px; overflow: hidden; border: var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.banner-wrapper { width: 100%; overflow: hidden; border-radius: 12px; margin: 5px 0; text-align: center; background: #000; }
+.banner-wrapper img { max-width: 100%; height: auto; display: block; margin: 0 auto; }
+.media { position: relative; padding-bottom: 56.25%; background: black; }
+.media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.heart-btn { position: absolute; top: 10px; right: 10px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); border: none; color: white; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+.meta { padding: 15px; }
 
-        .toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 25px; border-radius: 50px; transition: 0.4s; z-index: 10000; }
-        .toast.show { top: 30px; }
-    </style>
+/* Meta Header for Title and View Count */
+.meta-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+.meta h3 { margin: 0; font-size: 16px; line-height: 1.4; font-weight: 600; flex: 1; }
+.view-count-badge { font-size: 11px; color: #9ca3af; background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 6px; display: flex; align-items: center; gap: 5px; white-space: nowrap; border: 1px solid rgba(255,255,255,0.05); }
+
+.actions { display: flex; gap: 10px; }
+.unlock-btn { flex: 1; padding: 12px; border-radius: 10px; border: none; background: var(--primary-gradient); color: white; font-weight: 700; font-size: 13px; text-transform: uppercase; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.3); cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.unlock-btn.done { background: #10b981; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+.link-btn { width: 45px; background: #2d2d44; border: var(--border); border-radius: 10px; color: #a855f7; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+
+.info-box { background: var(--bg-card); border-radius: 16px; padding: 20px; border: var(--border); margin-bottom: 15px; }
+.step { display: flex; gap: 15px; margin-bottom: 15px; }
+.step-num { background: #2d2d44; color: #a855f7; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; flex-shrink: 0; }
+
+/* BOTTOM NAV */
+.bottom-nav { 
+    position: fixed; bottom: 10px; left: 10px; right: 10px; 
+    background: var(--bg-nav); backdrop-filter: blur(10px); 
+    border-radius: 20px; border: var(--border); 
+    display: flex; justify-content: space-around; 
+    padding: 8px 12px; max-width: 500px; margin: 0 auto; 
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5); z-index: 100; 
+}
+.nav-item { 
+    background: none; border: none; color: #6b7280; 
+    cursor: pointer; position: relative; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 3px; width: auto; height: auto;
+}
+.nav-item i { font-size: 18px; transition: 0.3s; }
+.nav-text { font-size: 10px; font-weight: 500; font-family: 'Hind Siliguri', sans-serif; }
+.nav-item.active { color: #ec4899; }
+.nav-item.active i { transform: translateY(-2px); }
+.nav-item.active::after { 
+    content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); 
+    width: 4px; height: 4px; background: #ec4899; border-radius: 50%; 
+}
+
+/* LOADING OVERLAY */
+.loading-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9); z-index: 999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    display: none;
+}
+.loader { border: 4px solid #f3f3f3; border-top: 4px solid #a855f7; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 8px 20px; border-radius: 50px; font-size: 12px; font-weight: 600; display: none; z-index: 200; }
+.single-view { position: fixed; inset: 0; background: var(--bg-main); z-index: 150; overflow-y: auto; padding: 15px; display: none; }
+.single-view.active { display: block; }
+.hidden { display: none; }
+.fadeIn { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+</style>
 </head>
 <body>
 
-    <div id="loader" style="position:fixed; inset:0; background:white; z-index:9999; display:flex; justify-content:center; align-items:center;">
-        <i class="fas fa-circle-notch fa-spin" style="color:var(--primary); font-size:2rem;"></i>
+<div class="app">
+    <!-- OVERLAY -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loader"></div>
+        <div id="loadingText" style="color:white; font-size:16px; font-weight:bold;">Processing...</div>
+        <div id="loadingSub" style="color:#aaa; font-size:12px; margin-top:5px;">Please do not close</div>
     </div>
 
-    <div id="join-screen">
-        <i class="fas fa-bullhorn" style="font-size:3rem; color:var(--primary); margin-bottom:20px;"></i>
-        <h2 style="margin-bottom:10px;">Join Channels</h2>
-        <p style="color:#666; margin-bottom:30px;">পেমেন্ট পেতে নিচের ২টি চ্যানেলে জয়েন করুন।</p>
-        <div class="join-card" onclick="openJoinLink(1)">
-            <div style="display:flex; align-items:center; gap:15px;"><i class="fab fa-telegram-plane" style="color:#229ED9; font-size:1.5rem;"></i><span>Official Channel</span></div>
-            <i class="fas fa-chevron-right"></i>
-        </div>
-        <div class="join-card" onclick="openJoinLink(2)">
-            <div style="display:flex; align-items:center; gap:15px;"><i class="fab fa-telegram-plane" style="color:#229ED9; font-size:1.5rem;"></i><span>Payment Proof</span></div>
-            <i class="fas fa-chevron-right"></i>
-        </div>
-        <button id="v-btn" class="verify-btn" onclick="verifyJoin()">VERIFY NOW</button>
+    <!-- SINGLE VIEW -->
+    <div id="singleView" class="single-view">
+        <button onclick="closeSingle()" style="background:#2d2d44; color:white; border:none; padding:10px 20px; border-radius:50px; margin-bottom:20px; display:flex; align-items:center; gap:8px;">
+            <i class="fas fa-arrow-left"></i> ফিরে যান
+        </button>
+        <div id="singleCardContainer"></div>
     </div>
 
-    <div id="toast" class="toast">Alert</div>
-
-    <div id="app">
+    <!-- MAIN CONTENT -->
+    <div id="mainContent">
         <div class="header">
-            <div class="top-bar">
-                <div class="user-pill">
-                    <img id="u-img" src="">
-                    <div class="user-info"><h3 id="u-name">...</h3><p id="u-id">ID: ...</p></div>
-                </div>
-                <div onclick="openSupport()" style="background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fas fa-headset"></i></div>
+            <h1 class="title"> VIRAL ZONE VIDEO<i class="fas fa-fire" style="color:#ec4899"></i></h1>
+            <div class="subtitle">Exclusive Premium Video </div>
+        </div>
+
+        <div id="homeSec" class="fadeIn">
+            <div class="search-wrapper">
+                <input id="searchInput" type="text" class="search-input" placeholder="ভিডিও খুঁজুন...">
+                <div class="search-icon"><i class="fas fa-search"></i></div>
+            </div>
+            <div id="filterContainer" class="filter-scroll"></div>
+            <div id="cards" class="cards">
+                <div style="text-align:center; padding:30px; color:#666"><i class="fas fa-circle-notch fa-spin"></i> Loading...</div>
             </div>
         </div>
 
-        <div class="balance-card">
-            <div class="bal-left"><div class="bal-title">Total Balance</div><div class="bal-amt">৳ <span id="u-bal">0.00</span></div></div>
-            <button class="btn-withdraw-mini" onclick="openWithdrawModal()"><i class="fas fa-arrow-down"></i> Withdraw</button>
+        <div id="likedSec" class="hidden fadeIn">
+            <h3 style="color:#ec4899; margin-left:5px;">❤️ পছন্দের ভিডিও</h3>
+            <div id="likedCards" class="cards"></div>
         </div>
 
-        <div id="p-home" class="page active">
-            <div class="promo-slider">
-                <div class="promo-track">
-                    <div class="promo-card pc-1"><h4>Refer & Earn</h4><i class="fas fa-users" style="opacity:0.3; font-size:4rem;"></i></div>
-                    <div class="promo-card pc-2"><h4>Fast Payment</h4><i class="fas fa-bolt" style="opacity:0.3; font-size:4rem;"></i></div>
-                </div>
-            </div>
-            <div class="bkash-menu">
-                <div class="menu-card" onclick="nav('p-work')"><div class="icon-circle"><i class="fas fa-briefcase"></i></div><div class="menu-title">Start Work</div></div>
-                <div class="menu-card" onclick="toast('Coming Soon!')"><div class="icon-circle"><i class="fas fa-video"></i></div><div class="menu-title">Video Task</div></div>
+        <div id="tutSec" class="hidden fadeIn">
+            <h3 style="color:#a855f7; margin-left:5px;">🎥 টিউটোরিয়াল</h3>
+            <div class="info-box">
+                <div id="tutEmbed" style="width:100%; aspect-ratio:16/9; background:#000; border-radius:10px; margin-bottom:20px;"></div>
+                <div class="step"><div class="step-num">১</div><div style="font-size:13px; color:#ddd;">UNLOCK বাটনে ক্লিক করুন।</div></div>
+                <div class="step"><div class="step-num">২</div><div style="font-size:13px; color:#ddd;">৩টি অ্যাড আসবে, ওই অ্যাড গুলো সম্পূর্ণভাবে দেখুন।</div></div>
+                <div class="step"><div class="step-num">৩</div><div style="font-size:13px; color:#ddd;">শেষে ৫ সেকেন্ড অপেক্ষা করলে আনলক হবে।</div></div>
             </div>
         </div>
 
-        <div id="p-work" class="page">
-            <div class="sec-head"><i class="fas fa-tasks"></i> Available Tasks</div>
-            <div id="task-area"></div>
-        </div>
-
-        <div id="p-profile" class="page">
-            <div style="background:var(--primary); color:white; padding:25px; border-radius:20px; text-align:center; margin-top:20px;">
-                <h3>Refer Link</h3>
-                <input id="ref-link" readonly style="width:100%; padding:10px; margin-top:10px; border-radius:10px; border:none; text-align:center;">
-                <button onclick="copyRef()" style="margin-top:10px; padding:5px 20px; border-radius:20px; border:none;">Copy</button>
-            </div>
-        </div>
-
-        <div id="withdraw-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:2000; align-items:flex-end;">
-            <div style="background:white; width:100%; padding:25px; border-radius:25px 25px 0 0;">
-                <h3>Withdraw</h3>
-                <input id="w-acc" placeholder="Account Number" style="width:100%; padding:15px; margin-top:15px; border-radius:12px; border:1px solid #ddd;">
-                <input id="w-amt" type="number" placeholder="Amount (TK)" style="width:100%; padding:15px; margin-top:10px; border-radius:12px; border:1px solid #ddd;">
-                <div id="hold-trigger" class="hold-container">
-                    <div class="hold-fill"></div>
-                    <span class="hold-text">Tap and Hold to Withdraw</span>
-                </div>
-                <button onclick="closeWithdrawModal()" style="width:100%; margin-top:10px; border:none; background:none; color:#777;">Cancel</button>
-            </div>
-        </div>
-
-        <div class="nav">
-            <div class="nav-item active" onclick="nav('p-home', this)"><i class="fas fa-home"></i><span>Home</span></div>
-            <div class="nav-item" onclick="nav('p-work', this)"><i class="fas fa-tasks"></i><span>Work</span></div>
-            <div class="nav-item" onclick="nav('p-profile', this)"><i class="fas fa-user"></i><span>Profile</span></div>
+        <div id="linkSec" class="hidden fadeIn">
+            <h3 style="color:#a855f7; margin-left:5px;">🔗 প্রয়োজনীয় লিংক</h3>
+            <div id="linkList" class="cards"></div>
         </div>
     </div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getDatabase, ref, onValue, update, push, get, query, orderByChild } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
+    <!-- UPDATED BOTTOM NAV -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="nav('homeSec', this)">
+            <i class="fas fa-home"></i>
+            <span class="nav-text">হোম</span>
+        </button>
+        <button class="nav-item" onclick="nav('likedSec', this)">
+            <i class="fas fa-heart"></i>
+            <span class="nav-text">পছন্দ</span>
+        </button>
+        <button class="nav-item" onclick="nav('tutSec', this)">
+            <i class="fas fa-book-open"></i>
+            <span class="nav-text">টিউটোরিয়াল</span>
+        </button>
+        <button class="nav-item" onclick="nav('linkSec', this)">
+            <i class="fas fa-link"></i>
+            <span class="nav-text">লিংক</span>
+        </button>
+    </div>
+    <div id="toast" class="toast">Link Copied!</div>
+</div>
 
-        // --- CONFIG ---
-        const BOT_TOKEN = "8660812282:AAFvuDIFxuU9_WaXPUMK6CGURFUGWY1jSos";
-        const CHANNEL_1_ID = "@Viralbdcontent_bot1"; 
-        const CHANNEL_2_ID = "@Viralbdcontent_bot";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { getDatabase, ref, onValue, runTransaction } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAYj2AGcDm7kKVm3W_BJogcY2MPMPGgwAU",
-            authDomain: "online-eraning-22953.firebaseapp.com",
-            databaseURL: "https://online-eraning-22953-default-rtdb.firebaseio.com",
-            projectId: "online-eraning-22953",
-            storageBucket: "online-eraning-22953.firebasestorage.app",
-            appId: "1:1010449141133:web:744962c94cb2f8b06081c4"
-        };
+const firebaseConfig = {
+    apiKey: "AIzaSyAYj2AGcDm7kKVm3W_BJogcY2MPMPGgwAU",
+  authDomain: "online-eraning-22953.firebaseapp.com",
+  databaseURL: "https://online-eraning-22953-default-rtdb.firebaseio.com",
+  projectId: "online-eraning-22953",
+  storageBucket: "online-eraning-22953.firebasestorage.app",
+  messagingSenderId: "1010449141133",
+  appId: "1:1010449141133:web:744962c94cb2f8b06081c4",
+  measurementId: "G-85TG7S0EQG"
+};
 
-        const fApp = initializeApp(firebaseConfig);
-        const db = getDatabase(fApp);
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const tg = window.Telegram.WebApp; tg.expand();
+const currentUserId = tg.initDataUnsafe?.user?.id || Math.floor(Math.random() * 90000000) + 10000000;
 
-        const userId = tg.initDataUnsafe.user?.id.toString() || "test_123";
-        const firstName = tg.initDataUnsafe.user?.first_name || "Guest";
-        const photoUrl = tg.initDataUnsafe.user?.photo_url || "https://ui-avatars.com/api/?name=" + firstName;
+let allVideos=[], filters=[], menuLinks=[];
+let adsgramIds=[], bannerAds=[]; 
+let settings={ ads_limit: 20, bot_app_link: "", monetag_id: "" };
+let currentFilter = 'all';
+let monetagLoaded = false;
 
-        let userData = {};
-
-        // INITIALIZE
-        async function init() {
-            const isMember = await checkMembership();
-            document.getElementById('loader').style.display = 'none';
-
-            if (!isMember) {
-                document.getElementById('join-screen').style.display = 'flex';
-            } else {
-                document.getElementById('app').style.display = 'block';
-                loadUserData();
+function init() {
+    // সেটিংস লোড
+    onValue(ref(db, 'settings'), s => { 
+        if(s.val()) {
+            settings = s.val();
+            if(settings.tutorial_id) document.getElementById('tutEmbed').innerHTML=`<iframe src="${settings.tutorial_id}" style="width:100%;height:100%;border:0" allowfullscreen></iframe>`;
+            
+            // মনেট্যাগ অ্যাড লোড
+            if(settings.monetag_id && !monetagLoaded) {
+                const script = document.createElement('script');
+                script.src = '//libtl.com/sdk.js';
+                script.dataset.zone = settings.monetag_id;
+                script.dataset.sdk = 'show_' + settings.monetag_id;
+                document.head.appendChild(script);
+                monetagLoaded = true;
             }
         }
+    });
 
-        async function checkMembership() {
-            try {
-                const check = async (cid) => {
-                    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/getChatMember?chat_id=${cid}&user_id=${userId}`);
-                    const data = await res.json();
-                    return data.ok && ["member", "administrator", "creator"].includes(data.result.status);
-                };
-                return (await check(CHANNEL_1_ID)) && (await check(CHANNEL_2_ID));
-            } catch (e) { return false; }
+    // অ্যাডস কনফিগারেশন লোড
+    onValue(ref(db, 'ads_config'), s => { 
+        adsgramIds = []; bannerAds = [];
+        if(s.val()) {
+            if(s.val().interstitial_ids) Object.values(s.val().interstitial_ids).forEach(id => adsgramIds.push(id));
+            if(s.val().banners) Object.values(s.val().banners).forEach(b => bannerAds.push(b));
         }
+        renderCards(); // অ্যাড লোড হলে আবার রেন্ডার হবে
+    });
 
-        window.verifyJoin = async () => {
-            const btn = document.getElementById('v-btn');
-            btn.innerText = "Checking...";
-            const member = await checkMembership();
-            if (member) {
-                toast("Success!");
-                location.reload();
-            } else {
-                toast("Join both channels first!");
-                btn.innerText = "VERIFY NOW";
+    // লিংক এবং ফিল্টার লোড
+    onValue(ref(db, 'links'), s => { menuLinks=[]; if(s.val()) Object.values(s.val()).forEach(v=>menuLinks.push(v)); renderLinks(); });
+    onValue(ref(db, 'filters'), s => { filters=[]; if(s.val()) Object.values(s.val()).forEach(v=>filters.push(v)); });
+
+    // ভিডিও লোড এবং ডিপ লিংক হ্যান্ডলিং (FIXED)
+    onValue(ref(db, 'videos'), s => {
+        allVideos = [];
+        if(s.val()) Object.entries(s.val()).forEach(([k,v])=>allVideos.push({id:k,...v}));
+        allVideos.reverse();
+        
+        renderFilters();
+        renderCards(); // আগে সব ভিডিও দেখাবে
+        renderLiked();
+
+        // এরপর চেক করবে লিংক আছে কিনা
+        checkDeepLink();
+    });
+}
+
+// ডিপ লিংক চেক করার ফাংশন (শেয়ার করা লিংক কাজ করার জন্য)
+function checkDeepLink() {
+    const startParam = tg.initDataUnsafe?.start_param || new URLSearchParams(window.location.search).get('file');
+    
+    if(startParam) {
+        let videoId = startParam.split('_')[0];
+        // ভিডিওটি ডাটাবেসে আছে কিনা চেক করা
+        const targetVideo = allVideos.find(v => v.id === videoId);
+        
+        if(targetVideo) {
+            console.log("Opening shared video:", videoId);
+            openSingle(videoId);
+        } else {
+            console.log("Shared video not found in database.");
+            showToast("ভিডিওটি খুঁজে পাওয়া যায়নি!");
+        }
+    }
+}
+
+function getCount(cat) { return cat === 'all' ? allVideos.length : allVideos.filter(v => v.category === cat).length; }
+
+function renderFilters() {
+    const div = document.getElementById('filterContainer');
+    let html = `<button class="filter-btn ${currentFilter==='all'?'active':''}" onclick="setFilter('all', this)">All <span class="badge">${getCount('all')}</span></button>`;
+    filters.forEach(f => {
+        html += `<button class="filter-btn ${currentFilter===f.id?'active':''}" onclick="setFilter('${f.id}', this)">${f.name} <span class="badge">${getCount(f.id)}</span></button>`;
+    });
+    div.innerHTML = html;
+}
+
+function renderCards() {
+    const div = document.getElementById('cards');
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    const list = allVideos.filter(v => (v.name.toLowerCase().includes(q)) && (currentFilter==='all' || v.category===currentFilter));
+    
+    div.innerHTML = list.length ? '' : '<p style="text-align:center;color:#666;margin-top:20px;">কোনো ভিডিও পাওয়া যায়নি</p>';
+    
+    list.forEach((v, index) => {
+        div.appendChild(createCard(v));
+        if ((index + 1) % 2 === 0 && bannerAds.length > 0) {
+            const bannerDiv = document.createElement('div');
+            bannerDiv.className = 'banner-wrapper';
+            bannerDiv.innerHTML = bannerAds[Math.floor(Math.random() * bannerAds.length)];
+            div.appendChild(bannerDiv);
+        }
+    });
+}
+
+function createCard(v) {
+    const liked = getLiked().includes(v.id);
+    const count = getProgress(v.id);
+    const req = v.ad_watches_required || 1;
+    const isUnlocked = count >= req;
+    const views = v.view_count || 0;
+
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.innerHTML = `
+        <div class="media">
+            <img src="${v.image_url}" onerror="this.src='https://via.placeholder.com/400'">
+            <button class="heart-btn" onclick="toggleLike('${v.id}')"><i class="${liked?'fas':'far'} fa-heart" style="color:${liked?'#ec4899':'white'}"></i></button>
+        </div>
+        <div class="meta">
+            <div class="meta-header">
+                <h3>${v.name}</h3>
+                <div class="view-count-badge">
+                    <i class="fas fa-eye"></i> ${views}
+                </div>
+            </div>
+            <div class="actions">
+                <button class="unlock-btn ${isUnlocked?'done':''}" onclick="handleUnlock('${v.id}', '${v.download_link}', ${req})">
+                    ${isUnlocked ? '<i class="fas fa-download"></i> DOWNLOAD' : `<i class="fas fa-play"></i> UNLOCK (${count}/${req})`}
+                </button>
+                <button class="link-btn" onclick="copyLink('${v.id}')"><i class="fas fa-link"></i></button>
+            </div>
+        </div>`;
+    return el;
+}
+
+window.copyLink = (id) => {
+    const botLink = settings.bot_app_link || "";
+    // বট লিংক না থাকলে ওয়েব লিংক কপি হবে
+    if(!botLink) { 
+        const url = window.location.origin + window.location.pathname + '?file=' + id;
+        navigator.clipboard.writeText(url); 
+        showToast("Web Link Copied!"); 
+        return; 
+    }
+    // টেলিগ্রাম লিংক জেনারেট
+    const tgLink = `${botLink}?startapp=${id}_${currentUserId}`;
+    navigator.clipboard.writeText(tgLink);
+    showToast("Share Link Copied!");
+}
+
+window.handleUnlock = (id, link, req) => {
+    const count = getProgress(id);
+    if(count >= req) { window.open(link, '_blank'); return; }
+    if(getDaily() >= (settings.ads_limit||20)) { showToast("Daily limit reached!"); return; }
+    if(adsgramIds.length === 0) { alert("Admin: Add Adsgram IDs"); return; }
+
+    showOverlay("Processing...");
+    playMixedSequence(0, id, link, req);
+}
+
+function playMixedSequence(step, videoId, link, req) {
+    const txt = document.getElementById('loadingText');
+    if(step >= 3) {
+        startFinalCountdown(videoId, req);
+        return;
+    }
+    const delay = 500; 
+    setTimeout(() => {
+        if(step === 1) {
+            if(settings.monetag_id) {
+                txt.innerText = "Loading Partner Ad...";
+                const sdkFunc = window['show_' + settings.monetag_id];
+                if(typeof sdkFunc === 'function') {
+                    sdkFunc().then(() => playMixedSequence(step + 1, videoId, link, req))
+                           .catch(e => playMixedSequence(step + 1, videoId, link, req));
+                } else { playMixedSequence(step + 1, videoId, link, req); }
+            } else { playMixedSequence(step + 1, videoId, link, req); }
+        } 
+        else {
+            txt.innerText = "Loading Video Ad...";
+            if(window.Adsgram) {
+                const blockId = adsgramIds[step % adsgramIds.length];
+                const AdController = window.Adsgram.init({ blockId: blockId });
+                AdController.show().then((result) => playMixedSequence(step + 1, videoId, link, req))
+                            .catch((result) => playMixedSequence(step + 1, videoId, link, req));
+            } else { playMixedSequence(step + 1, videoId, link, req); }
+        }
+    }, delay);
+}
+
+// ভিউ কাউন্ট বাড়ানোর ফাংশন
+function incrementViewCount(videoId) {
+    // চেক করবে ইউজার আগে এই ভিডিওর ভিউ কাউন্ট করেছে কিনা (Life Time 1 View)
+    const storageKey = 'viewed_event_' + videoId;
+    if(localStorage.getItem(storageKey)) return;
+
+    const vidRef = ref(db, 'videos/' + videoId + '/view_count');
+    runTransaction(vidRef, (currentViews) => {
+        return (currentViews || 0) + 1;
+    }).then(() => {
+        localStorage.setItem(storageKey, 'true'); // মার্ক করে রাখা হলো
+    }).catch(err => console.error("View update failed", err));
+}
+
+function startFinalCountdown(videoId, req) {
+    let count = 5;
+    const txt = document.getElementById('loadingText');
+    const sub = document.getElementById('loadingSub');
+    txt.innerText = `Verification Successful!`;
+    sub.innerText = `Unlocking in ${count} seconds...`;
+    const timer = setInterval(() => {
+        count--;
+        if(count > 0) { sub.innerText = `Unlocking in ${count} seconds...`; } 
+        else {
+            clearInterval(timer);
+            
+            // আনলক সংখ্যা বাড়ানো
+            const currentProgress = getProgress(videoId) + 1;
+            localStorage.setItem('p_'+videoId, currentProgress);
+            
+            incDaily(); 
+
+            // যদি টার্গেট পূর্ণ হয়, তবেই ভিউ কাউন্ট হবে
+            if(currentProgress >= req) {
+                incrementViewCount(videoId);
             }
-        };
 
-        function loadUserData() {
-            const userRef = ref(db, `users/${userId}`);
-            onValue(userRef, (snap) => {
-                if (!snap.exists()) {
-                    update(userRef, { id: userId, firstName, balance: 0, photoUrl });
-                } else {
-                    userData = snap.val();
-                    document.getElementById('u-bal').innerText = userData.balance.toFixed(2);
-                    document.getElementById('u-name').innerText = userData.firstName;
-                    document.getElementById('u-id').innerText = "ID: " + userId;
-                    document.getElementById('u-img').src = userData.photoUrl;
-                    document.getElementById('ref-link').value = `https://t.me/YourBot?start=${userId}`;
-                }
-            });
-            loadTasks();
+            renderCards();
+            if(document.getElementById('singleView').style.display==='block') openSingle(videoId);
+            hideOverlay(); showToast("Unlock Successful!");
         }
+    }, 1000);
+}
 
-        function loadTasks() {
-            const taskRef = ref(db, 'tasks');
-            onValue(taskRef, (snap) => {
-                const area = document.getElementById('task-area');
-                area.innerHTML = '';
-                snap.forEach(child => {
-                    const t = child.val();
-                    area.innerHTML += `
-                        <div style="background:white; padding:15px; border-radius:15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; border:1px solid #eee;">
-                            <div><b>${t.title}</b><br><small style="color:green;">+${t.reward} TK</small></div>
-                            <button onclick="window.doTask('${child.key}', '${t.url}', ${t.reward})" style="background:var(--primary-soft); color:var(--primary); border:none; padding:8px 20px; border-radius:50px; font-weight:700;">Start</button>
-                        </div>`;
-                });
-            });
-        }
+function showOverlay(msg) { document.getElementById('loadingOverlay').style.display = 'flex'; document.getElementById('loadingText').innerText = msg; }
+function hideOverlay() { document.getElementById('loadingOverlay').style.display = 'none'; }
+function showToast(msg) { const t=document.getElementById('toast'); t.innerText=msg; t.style.display='block'; setTimeout(()=>t.style.display='none', 3000); }
 
-        window.doTask = (id, url, r) => {
-            tg.openLink(url);
-            setTimeout(() => {
-                update(ref(db, `users/${userId}`), { balance: userData.balance + r });
-                toast("Reward Added!");
-            }, 5000);
-        };
+function renderLinks() { 
+    const d=document.getElementById('linkList'); 
+    d.innerHTML=''; 
+    menuLinks.forEach(l => { 
+        d.innerHTML += `
+        <div class="card" style="padding:15px;display:flex;align-items:center;gap:15px;">
+            <i class="fas fa-link" style="color:#a855f7;font-size:20px"></i>
+            <div style="flex:1"><b>${l.title}</b></div>
+            <a href="${l.url}" target="_blank" style="background:#2d2d44;color:white;padding:5px 15px;border-radius:50px;text-decoration:none;font-size:12px">Open</a>
+        </div>`; 
+    }); 
+}
 
-        window.nav = (p, el) => {
-            document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
-            document.getElementById(p).classList.add('active');
-            if(el) {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                el.classList.add('active');
-            }
-        };
+function renderLiked() { const d=document.getElementById('likedCards'); const l=getLiked(); const v=allVideos.filter(x=>l.includes(x.id)); d.innerHTML = v.length?'':'<p style="text-align:center;color:gray;padding:20px">পছন্দের ভিডিও নেই</p>'; v.forEach(x=>d.appendChild(createCard(x))); }
+window.nav = (id, btn) => { ['homeSec','likedSec','tutSec','linkSec'].forEach(s=>document.getElementById(s).classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); if(id==='homeSec') document.getElementById('mainContent').style.display='block'; }
+window.setFilter = (id, btn) => { currentFilter=id; renderFilters(); renderCards(); }
+document.getElementById('searchInput').oninput = renderCards;
+function getLiked(){ return JSON.parse(localStorage.getItem('likes')||'[]'); }
+window.toggleLike=(id)=>{ let l=getLiked(); if(l.includes(id)) l=l.filter(x=>x!==id); else l.push(id); localStorage.setItem('likes',JSON.stringify(l)); renderCards(); renderLiked(); }
+function getProgress(id){ return parseInt(localStorage.getItem('p_'+id)||0); }
+function incProgress(id){ localStorage.setItem('p_'+id, getProgress(id)+1); }
+function getDaily(){ const d=JSON.parse(localStorage.getItem('daily')||'{}'); return d.date===new Date().toDateString()?d.count:0; }
+function incDaily(){ localStorage.setItem('daily', JSON.stringify({date:new Date().toDateString(), count:getDaily()+1})); }
 
-        window.openWithdrawModal = () => document.getElementById('withdraw-modal').style.display = 'flex';
-        window.closeWithdrawModal = () => document.getElementById('withdraw-modal').style.display = 'none';
+// সিঙ্গেল ভিডিও ওপেন করার লজিক
+window.openSingle = (id) => { 
+    const v = allVideos.find(x => x.id === id); 
+    if(!v) return; 
+    
+    document.getElementById('mainContent').style.display='none'; 
+    document.getElementById('singleView').classList.add('active'); 
+    document.getElementById('singleCardContainer').innerHTML=''; 
+    document.getElementById('singleCardContainer').appendChild(createCard(v)); 
+    
+    // URL আপডেট করা যাতে রিলোড দিলে থাকে
+    const newUrl = window.location.pathname + '?file=' + id;
+    window.history.pushState({ path: newUrl }, '', newUrl);
+}
 
-        // HOLD TO WITHDRAW
-        let holdTime;
-        const hBtn = document.getElementById('hold-trigger');
-        hBtn.addEventListener('mousedown', startH);
-        hBtn.addEventListener('touchstart', startH);
-        hBtn.addEventListener('mouseup', endH);
-        hBtn.addEventListener('touchend', endH);
+window.closeSingle = () => { 
+    document.getElementById('singleView').classList.remove('active'); 
+    document.getElementById('mainContent').style.display='block'; 
+    
+    // URL ক্লিন করা
+    window.history.pushState({}, '', window.location.pathname); 
+    renderCards(); 
+}
 
-        function startH() {
-            hBtn.classList.add('active');
-            holdTime = setTimeout(processWithdraw, 2500);
-        }
-        function endH() {
-            hBtn.classList.remove('active');
-            clearTimeout(holdTime);
-        }
-
-        function processWithdraw() {
-            const amt = parseFloat(document.getElementById('w-amt').value);
-            const acc = document.getElementById('w-acc').value;
-            if (amt && acc && userData.balance >= amt) {
-                push(ref(db, 'withdrawals'), { userId, amount: amt, account: acc, status: 'pending', timestamp: Date.now() });
-                update(ref(db, `users/${userId}`), { balance: userData.balance - amt });
-                toast("Withdraw Request Sent!");
-                closeWithdrawModal();
-            } else {
-                toast("Check Balance/Inputs");
-            }
-        }
-
-        window.openJoinLink = (id) => tg.openTelegramLink(id === 1 ? `https://t.me/${CHANNEL_1_ID.replace('@','')}` : `https://t.me/${CHANNEL_2_ID.replace('@','')}`);
-        window.toast = (m) => { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000); };
-        window.copyRef = () => { document.getElementById('ref-link').select(); document.execCommand('copy'); toast("Copied!"); };
-
-        init();
-    </script>
+init();
+</script>
 </body>
 </html>
+
+
+
+
